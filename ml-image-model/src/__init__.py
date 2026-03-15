@@ -1,0 +1,1 @@
+"""ML image model package."""
