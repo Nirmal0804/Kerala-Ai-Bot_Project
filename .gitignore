@@ -1,0 +1,31 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local downloads and installers
+*.deb
+
+# Project-specific artifacts
+ml-image-model/.venv/
+ml-image-model/venv/
+ml-image-model/__pycache__/
+ml-image-model/.pytest_cache/
+ml-image-model/Datasets/
+ml-image-model/data/*
+!ml-image-model/data/README.md
+ml-image-model/models/*
+!ml-image-model/models/.gitkeep
+ml-image-model/checkpoints/
+ml-image-model/runs/
+ml-image-model/*.pt
+ml-image-model/*.pth
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db

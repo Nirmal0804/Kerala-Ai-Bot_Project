@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.pytest_cache/
+
+# Data and model artifacts
+Datasets/
+data/*
+!data/README.md
+models/*
+!models/.gitkeep
+uploads/*
+!uploads/.gitkeep
+checkpoints/
+runs/
+*.pt
+*.pth
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
