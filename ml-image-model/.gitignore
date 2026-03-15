@@ -13,6 +13,8 @@ data/*
 !data/README.md
 models/*
 !models/.gitkeep
+uploads/*
+!uploads/.gitkeep
 checkpoints/
 runs/
 *.pt

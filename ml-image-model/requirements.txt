@@ -2,5 +2,7 @@ tensorflow>=2.16.0
 keras>=3.0.0
 numpy>=1.24.0
 opencv-python>=4.10.0
+pillow>=10.0.0
 scikit-learn>=1.5.0
+torch>=2.0.0
 pytest>=8.0.0
