@@ -10,20 +10,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.inference.predict import predict_disease
+from src.inference.predict import predict_disease, load_class_names
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
-
-
-def _discover_class_names(dataset_train_dir: Path) -> list[str]:
-    if not dataset_train_dir.is_dir():
-        raise FileNotFoundError(f"Training dataset directory not found: {dataset_train_dir}")
-
-    class_names = sorted([p.name for p in dataset_train_dir.iterdir() if p.is_dir()])
-    if not class_names:
-        raise ValueError(f"No class directories found in: {dataset_train_dir}")
-
-    return class_names
 
 
 def _list_upload_images(upload_dir: Path) -> list[Path]:
@@ -49,13 +38,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        default="models/crop_disease_model.keras",
-        help="Path to trained model file (.keras)",
-    )
-    parser.add_argument(
-        "--dataset-train-dir",
-        default="Datasets/train",
-        help="Training dataset folder used to infer class order",
+        default="models/crop_disease_model",
+        help="Path to trained model directory or .keras file",
     )
     return parser.parse_args()
 
@@ -65,10 +49,17 @@ def main() -> None:
 
     upload_dir = Path(args.upload_dir)
     image_paths = _list_upload_images(upload_dir)
-    class_names = _discover_class_names(Path(args.dataset_train_dir))
+    
+    # Load class names saved with the model
+    try:
+        class_names = load_class_names(args.model)
+    except Exception as e:
+        print(f"Warning: Could not load class names: {e}")
+        class_names = None
 
     print(f"Found {len(image_paths)} image(s) in: {upload_dir}")
-    print(f"Class order: {class_names}")
+    if class_names:
+        print(f"Class order: {class_names}")
 
     for image_path in image_paths:
         result = predict_disease(

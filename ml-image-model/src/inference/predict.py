@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Dict, List
 
@@ -43,6 +44,20 @@ def load_trained_model(model_path: str = "models/crop_disease_model") -> tf.kera
     return tf.keras.models.load_model(path)
 
 
+def load_class_names(model_path: str = "models/crop_disease_model") -> List[str]:
+    """Load class names from saved JSON file or return defaults."""
+    path = Path(model_path)
+    
+    if path.is_dir():
+        class_names_file = path / "class_names.json"
+        if class_names_file.exists():
+            with open(class_names_file, "r") as f:
+                return json.load(f)
+    
+    # Fallback to defaults
+    return DEFAULT_CLASS_NAMES
+
+
 def preprocess_image(image_path: str, image_size: tuple[int, int] = IMAGE_SIZE) -> np.ndarray:
     """Read image from path, resize to 224x224, normalize, and add batch dimension."""
     image = cv2.imread(image_path)
@@ -80,7 +95,7 @@ def predict_disease(
             }
     """
     if class_names is None:
-        class_names = DEFAULT_CLASS_NAMES
+        class_names = load_class_names(model_path)
 
     model = load_trained_model(model_path)
     image_batch = preprocess_image(image_path, image_size=IMAGE_SIZE)
